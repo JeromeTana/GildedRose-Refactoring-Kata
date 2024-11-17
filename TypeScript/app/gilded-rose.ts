@@ -14,7 +14,6 @@ export class GildedRose {
   items: Array<Item>;
   MIN_QUALITY = 0;
   MAX_QUALITY = 50;
-  MIN_SELL_IN = 0;
 
   constructor(items = [] as Array<Item>) {
     this.items = items;
@@ -36,6 +35,10 @@ export class GildedRose {
     item.quality = this.MIN_QUALITY;
   }
 
+  isDue(item: Item) {
+    return item.sellIn < 0;
+  }
+
   updateQuality() {
     for (let i = 0; i < this.items.length; i++) {
       let item = this.items[i];
@@ -48,10 +51,10 @@ export class GildedRose {
       switch (true) {
         case item.name.includes("Aged Brie"):
           this.increaseQuality(item);
-          item.sellIn < this.MIN_SELL_IN && this.increaseQuality(item);
+          this.isDue(item) && this.increaseQuality(item);
           break;
         case item.name.includes("Backstage passes"):
-          if (item.sellIn < this.MIN_SELL_IN) {
+          if (this.isDue(item)) {
             item.quality = this.MIN_QUALITY;
             break;
           }
@@ -61,11 +64,11 @@ export class GildedRose {
           break;
         case item.name.includes("Conjured"):
           this.decreaseQuality(item, 2);
-          item.sellIn < this.MIN_SELL_IN && this.decreaseQuality(item, 2);
+          this.isDue(item) && this.decreaseQuality(item, 2);
           break;
         default:
           this.decreaseQuality(item);
-          item.sellIn < this.MIN_SELL_IN && this.decreaseQuality(item);
+          this.isDue(item) && this.decreaseQuality(item);
           break;
       }
     }
