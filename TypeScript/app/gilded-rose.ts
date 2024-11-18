@@ -20,19 +20,17 @@ export class GildedRose {
   }
 
   increaseQuality(item: Item, number: number = 1) {
-    if (item.quality + number <= this.MAX_QUALITY) {
-      item.quality += number;
-      return;
+    if (item.quality + number > this.MAX_QUALITY) {
+      return (item.quality = this.MAX_QUALITY);
     }
-    item.quality = this.MAX_QUALITY;
+    return (item.quality += number);
   }
 
   decreaseQuality(item: Item, number: number = 1) {
-    if (item.quality - number >= this.MIN_QUALITY) {
-      item.quality -= number;
-      return;
+    if (item.quality - number < this.MIN_QUALITY) {
+      return (item.quality = this.MIN_QUALITY);
     }
-    item.quality = this.MIN_QUALITY;
+    return (item.quality -= number);
   }
 
   isDue(item: Item) {
